@@ -1,0 +1,35 @@
+{
+  "name": "virtual-keyboard",
+  "version": "1.0.0",
+  "description": "RS School task https://github.com/rolling-scopes-school/tasks/blob/master/tasks/virtual-keyboard/virtual-keyboard-en.md",
+  "main": "index.js",
+  "scripts": {
+    "style": "sass --watch src/sass/style.scss dist/style.css",
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malinka775/virtual-keyboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malinka775/virtual-keyboard/issues"
+  },
+  "homepage": "https://github.com/malinka775/virtual-keyboard#readme",
+  "dependencies": {
+    "eslint-loader": "^4.0.2",
+    "sass": "^1.51.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "webpack-dev-server": "^4.9.0"
+  }
+}
