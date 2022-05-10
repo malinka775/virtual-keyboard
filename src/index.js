@@ -414,6 +414,10 @@ class Keyboard {
 
 document.addEventListener('DOMContentLoaded', () => {
   const keyboard = new Keyboard('ru');
+  const infoDiv = document.createElement('div');
+  infoDiv.style.color = 'yellow';
+  infoDiv.innerText = 'Layout change: Alt + Shift';
+  BODY.append(infoDiv);
   keyboard.render();
   keyboard.addOnClickHandlers();
   keyboard.addOnKeyEventHandlers();
