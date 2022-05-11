@@ -171,7 +171,6 @@ class Keyboard {
 
   render() {
     // add main elements
-    console.log('making main elements');
     const keyboardWrapper = document.createElement('div');
     keyboardWrapper.classList.add('wrapper');
     const keyboardEl = document.createElement('div');
@@ -194,8 +193,6 @@ class Keyboard {
     });
 
     // add keys
-    console.log('making keys');
-
     this.keys.forEach((key) => {
       const keyButton = document.createElement('div');
       keyButton.classList.add('key');
@@ -265,42 +262,50 @@ class Keyboard {
     this.keys.forEach((key) => {
       const keyButton = key.button;
       keyButton.addEventListener('click', () => {
-        switch (key.label) {
-          case 'right':
+        switch (key.id) {
+          case 'ArrowRight':
             this.textarea.selectionStart += 1;
             this.textarea.selectionEnd = this.textarea.selectionStart;
             break;
-          case 'left':
+          case 'ArrowLeft':
             this.textarea.selectionStart -= 1;
             this.textarea.selectionEnd = this.textarea.selectionStart;
             break;
-          case 'up':
-            this.value += 'up';
-            this.onChangeHandler();
+          case 'ArrowUp':
+            this.textarea.selectionEnd = this.textarea.setSelectionRange(0, 0);
             break;
-          case 'down':
-            this.value += 'down';
-            this.onChangeHandler();
+          case 'ArrowDown':
+            this.textarea.selectionEnd = this.value.length;
+            this.textarea.selectionStart = this.value.length;
+            this.textarea.focus();
             break;
-          case 'tab':
+          case 'Tab':
             this.value += '\t';
             this.onChangeHandler();
             break;
-          case 'caps lock':
+          case 'CapsLock':
             this.capsLock = !this.capsLock;
             keyButton.classList.toggle('on');
             break;
-          case 'enter':
+          case 'Enter':
             this.value += '\n';
             this.onChangeHandler();
             break;
-          case 'backspace':
+          case 'Backspace':
             this.value = this.value.slice(0, -1);
             this.onChangeHandler();
             break;
-          case 'shift':
-          case 'ctrl':
-          case 'alt': keyButton.innerText = key.label.toUpperCase(); break;
+          case 'Space':
+            this.value += ' ';
+            this.onChangeHandler();
+            break;
+          case 'ShiftRight':
+          case 'ShiftLeft':
+          case 'MetaLeft':
+          case 'ControlLeft':
+          case 'ControlRight':
+          case 'AltLeft':
+          case 'AltRight': break;
           default:
             if (key.additional) {
               this.value += this.shift ? key.additional : key.label;
@@ -369,6 +374,24 @@ class Keyboard {
     });
   };
 
+  addOnMouseDown() {
+    document.addEventListener('mousedown', (e) => {
+      if (e.target.id === 'ShiftLeft' || e.target.id === 'ShiftRight') {
+        this.shift = true;
+        console.log(this.shift);
+      }
+    });
+  }
+
+  addOnMouseUp() {
+    document.addEventListener('mouseup', (e) => {
+      if (e.target.id === 'ShiftLeft' || e.target.id === 'ShiftRight') {
+        this.shift = false;
+        console.log(this.shift);
+      }
+    });
+  }
+
   onKeyUp = (e) => {
     this.keys.forEach((key) => {
       const keyButton = key.button;
@@ -381,7 +404,7 @@ class Keyboard {
           case ('ControlRight'): this.ctlr = false; break;
           case ('MetaLeft'): this.meta = false; break;
           case ('AltLeft'):
-          case ('AltRight'): e.preventDefault(); this.alt = false; console.log(key); break;
+          case ('AltRight'): e.preventDefault(); this.alt = false; break;
           default: break;
         }
       } else if (e.key.toLocaleLowerCase() === key.label) {
@@ -399,7 +422,6 @@ class Keyboard {
 
   onChangeHandler() {
     this.textarea.value = this.value;
-    console.log(this.textarea.value);
   }
 
   onLanguageChange() {
@@ -409,16 +431,20 @@ class Keyboard {
     this.keys = this.keys === this.en ? this.ru : this.en;
     this.render();
     this.addOnClickHandlers();
+    localStorage.setItem('lang', this.keys === this.en ? 'en' : 'ru');
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const keyboard = new Keyboard('ru');
+  const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en';
+  const keyboard = new Keyboard(lang);
   const infoDiv = document.createElement('div');
   infoDiv.style.color = 'yellow';
-  infoDiv.innerText = 'Layout change: Alt + Shift';
+  infoDiv.innerText = 'Layout change: Alt + Shift \n This app was created on Windows OS \n Please make sure your device keyboard layout is English when first use';
   BODY.append(infoDiv);
   keyboard.render();
   keyboard.addOnClickHandlers();
   keyboard.addOnKeyEventHandlers();
+  keyboard.addOnMouseDown();
+  keyboard.addOnMouseUp();
 });
