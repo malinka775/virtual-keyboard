@@ -409,11 +409,13 @@ class Keyboard {
     this.keys = this.keys === this.en ? this.ru : this.en;
     this.render();
     this.addOnClickHandlers();
+    localStorage.setItem('lang', this.keys === this.en ? 'en' : 'ru');
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const keyboard = new Keyboard('ru');
+  const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en';
+  const keyboard = new Keyboard(lang);
   const infoDiv = document.createElement('div');
   infoDiv.style.color = 'yellow';
   infoDiv.innerText = 'Layout change: Alt + Shift';
